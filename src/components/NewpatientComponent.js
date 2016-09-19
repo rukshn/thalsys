@@ -7,27 +7,30 @@ var DatePicker = require('react-datepicker');
 var moment = require('moment');
 require('react-datepicker/dist/react-datepicker.css');
 
+
+let init_state = {
+		dor: moment(),
+		dob: moment(),
+		clinic_number: '',
+		first_name: '',
+		last_name: '',
+		gender: 1,
+		occupation: '',
+		civil_status: 1,
+		religion: 1,
+		id_number: '',
+		address: '',
+		district: 1,
+		province: 1,
+		gname: '',
+		gcontact: ''
+	}
+
 class NewpatientComponent extends React.Component {
 
   constructor(){
   	super()
-  	this.state = {
-  		dor: moment(),
-  		dob: moment(),
-  		clinic_number: '',
-  		first_name: '',
-  		last_name: '',
-  		gender: '',
-  		occupation: '',
-  		civil_status: '',
-  		religion: '',
-  		id_number: '',
-  		address: '',
-  		district: '',
-  		province: '',
-  		gname: '',
-  		gcontact: ''
-  	}
+  	this.state = init_state
   }
 
   dobChange(date){
@@ -48,7 +51,11 @@ class NewpatientComponent extends React.Component {
   	change[dvar] = e.target.value
 
   	this.setState(change)
-  
+
+  }
+
+  reset_form(){
+  	this.setState(init_state)
   }
 
   add_new_patient(e){
@@ -78,181 +85,203 @@ class NewpatientComponent extends React.Component {
   render() {
     return (
       <div className="newpatient-component">
-      	<div className="container">
-	      	<h2>Add New Patient Record</h2>
-	        <form onSubmit={this.add_new_patient.bind(this)}>
-				
-				<div className="col-md-10">
-					<div className="alert alert-info alert-dismissible" role="alert">
-					  <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					  <strong>Pro Tip</strong> Use the TAB key to easily to go through the feilds.
+      	<div className="ui container">
+
+			<div className="ui ordered steps">
+			  <div className="active step">
+			    <div className="content">
+			      <div className="title">Patient</div>
+			      <div className="description">Patient personal details</div>
+			    </div>
+			  </div>
+			  <div className="step">
+			    <div className="content">
+			      <div className="title">Medical</div>
+			      <div className="description">Patient medical history</div>
+			    </div>
+			  </div>
+			  <div className="step">
+			    <div className="content">
+			      <div className="title">Surgical</div>
+			      <div className="description">Patient surgical history</div>
+			    </div>
+			  </div>
+
+			  <div className="step">
+			    <div className="content">
+			      <div className="title">Surgical</div>
+			      <div className="description">Patient surgical history</div>
+			    </div>
+			  </div>
+			</div>
+
+
+      		<div className="ui tertiary inverted teal segment">
+		  		<p>This is the first step, you must enter patient's personal details and proceed to next step. Use TAB key for quick navigation</p>
+			</div>
+
+			<form onSubmit={this.add_new_patient.bind(this)}>
+
+	      		<div className="ui form">
+
+					<h3 className="ui header">Patient details</h3>
+
+					<div className="field">
+						<label>Name</label>
+						<div className="two fields">
+							<div className="field">
+								<input required autoFocus placeholder="First Name" type="text" onChange={this.handleChange.bind(this, 'first_name')} value={this.state.first_name} />
+							</div>
+							<div className="field">
+								<input required placeholder="Last Name" type="text" onChange={this.handleChange.bind(this, 'last_name')}  value={this.state.last_name} />
+							</div>
+						</div>
 					</div>
 
-					<h4>Personal Information</h4>
+					<div className="field">
+						<div className="two fields">
+							<div className="field">
+								<label>Clinic required number</label>
+								<input placeholder="Clinic Number" type="text" onChange={this.handleChange.bind(this, 'clinic_number')} value={this.state.clinic_number} />
+							</div>
 
-				</div>
-
-	        	<div className="col-md-5">
-
-					<div className="form-group">
-						<label>Patient ID</label>
-						<input name="clinic_number" type="text" autoFocus onChange={this.handleChange.bind(this, 'clinic_number')} className="form-control" value={this.state.clinic_number} placeholder="Patient Clinic Number" />
+							<div className="field" id="dpicker" >
+								<label>Date of registration</label>
+								<DatePicker className="ui input fluid" selected={this.state.dor} onChange={this.dorChange.bind(this)} />
+							</div>
+						</div>
 					</div>
 
-					<div className="form-group">
-						<label>First Name</label>
-						<input type="text" className="form-control" onChange={this.handleChange.bind(this, 'first_name')} value={this.state.first_name} placeholder="Patient First Names/ Initials" />
+					<div className="field">
+						<div className="two fields">
+							<div className="field">
+								<label>Gender</label>
+								 <select className="ui dropdown" onChange={this.handleChange.bind(this, 'gender')}>
+								 	<option value="1">Male</option>
+								 	<option value="2">Female</option>
+								 	<option value="0">Other</option>
+								 </select>
+							</div>
+
+							<div className="field" id="dpicker">
+								<label>Date of birth</label>
+								<DatePicker className="ui input fluid" selected={this.state.dob} onChange={this.dobChange.bind(this)} />
+							</div>
+						</div>
 					</div>
 
-					<div className="form-group">
-						<label>Last Name</label>
-						<input type="text" className="form-control" onChange={this.handleChange.bind(this, 'last_name')} value={this.state.last_name} placeholder="Patient Last Name" />
+					<div className="field">
+						<div className="three fields">
+							<div className="field">
+								<label>Address</label>
+								<input required placeholder="Address without district" type="text" />
+							</div>
+							<div className="field">
+								<label>District</label>
+								<select value="1" onChange={this.handleChange.bind(this, 'district')} className="ui dropdown">
+								  <option value="1">Ampara</option>
+								  <option value="2">Anuradhapura</option>
+								  <option value="3">Badulla</option>
+								  <option value="4">Batticaloa</option>
+								  <option value="5">Colombo</option>
+								  <option value="6">Galle</option>
+								  <option value="7">Gampaha</option>
+								  <option value="8">H'thota</option>
+								  <option value="9">Jaffna</option>
+								  <option value="10">Kaluthara</option>
+								  <option value="11">Kandy</option>
+								  <option value="12">Kegalle</option>
+								  <option value="13">Kilinochchi</option>
+								  <option value="14">Kurunegala</option>
+								  <option value="15">Mannar</option>
+								  <option value="16">Matale</option>
+								  <option value="17">Mathara</option>
+								  <option value="18">Monaragala</option>
+								  <option value="19">Mullaitivu</option>
+								  <option value="20">Nuwara Eliya</option>
+								  <option value="21">Polonnaruwa</option>
+								  <option value="22">Puttalam</option>
+								  <option value="23">Ratnapura</option>
+								  <option value="24">Trincomalee</option>
+								  <option value="25">Vavuniya</option>
+								</select>
+							</div>
+
+							<div className="field">
+								<label>Province</label>
+								<select value="1" onChange={this.handleChange.bind(this, 'province')} className="ui dropdown">
+								  <option value="1">Western</option>
+								  <option value="2">North Western</option>
+								  <option value="3">Central</option>
+								  <option value="4">Southern</option>
+								  <option value="5">Sabaragmuwa</option>
+								  <option value="6">Uwa</option>
+								  <option value="7">Nothern</option>
+								  <option value="8">Eastern</option>
+								  <option value="9">North Central</option>
+								</select>
+							</div>
+						</div>
 					</div>
 
-					<div className="form-group">
-						<label>Gender</label>
-						<select value="1" onChange={this.handleChange.bind(this, 'gender')} className="form-control">
-						  <option value="1">Male</option>
-						  <option value="2">Female</option>
-						  <option value="0">Other</option>
-						</select>
+					<div className="field">
+						<div className="three fields">
+
+							<div className="field">
+								<label>Religion</label>
+								<select value="1" onChange={this.handleChange.bind(this, 'religion')} className="ui dropdown">
+								  <option value="1">Bhuddist</option>
+								  <option value="2">Cathoic</option>
+								  <option value="3">Hindu</option>
+								  <option value="4">Muslim</option>
+								  <option value="0">Other</option>
+								</select>
+							</div>
+
+							<div className="field">
+								<label>Civil Status</label>
+								<select value="1" onChange={this.handleChange.bind(this, 'civil_status')} className="form-control">
+								  <option value="1">Single</option>
+								  <option value="2">Married</option>
+								  <option value="0">Other</option>
+								</select>
+							</div>
+
+							<div className="field">
+								<label>Patient identification number</label>
+								<input required placeholder="NIC/Passport/Driving Licence Number" type="text" onChange={this.handleChange.bind(this, 'id_number')} />
+							</div>
+						</div>
+					</div>
+					
+					<div className="field">
+						<label>Guardian details</label>
+						<div className="fields">
+							<div className="twelve wide field">
+							<input placeholder="Guardian name" type="text" onChange={this.handleChange.bind(this, 'gname')} />
+							</div>
+							
+							<div className="six wide field">
+								<input placeholder="Guardian contact #" type="text" onChange={this.handleChange.bind(this, 'gcontact')} />
+							</div>
+						</div>
 					</div>
 
+	      		</div>
 
-					<div className="form-group">
-						<label>Occupation</label>
-						<input type="text" className="form-control" onChange={this.handleChange.bind(this, 'occupation')} value={this.state.occupation} placeholder="Patient Occupation" />
-					</div>
-				</div>
-				
-				<div className="col-md-5">
-					<div className="form-group" id="dpicker">
-						<label>Date of Registration</label>
-						<DatePicker className="form-control" selected={this.state.dor} onChange={this.dorChange.bind(this)} />
-					</div>
+	      		<button type="submit" className="ui teal button">Submit</button>
+	      		<button onClick={this.reset_form.bind(this)} className="ui button">Reset</button>
 
-					<div className="form-group" id="dpicker">
-						<label>Date of Birth</label>
-						<DatePicker className="form-control" selected={this.state.dob} onChange={this.dobChange.bind(this)} />
-					</div>
-
-					<div className="form-group">
-						<label>Status</label>
-						<select value="1" onChange={this.handleChange.bind(this, 'civil_status')} className="form-control">
-						  <option value="1">Single</option>
-						  <option value="2">Married</option>
-						  <option value="0">Other</option>
-						</select>
-					</div>
-
-					<div className="form-group">
-						<label>Religion</label>
-						<select value="1" onChange={this.handleChange.bind(this, 'religion')} className="form-control">
-						  <option value="1">Bhuddist</option>
-						  <option value="2">Cathoic</option>
-						  <option value="3">Hindu</option>
-						  <option value="4">Muslim</option>
-						  <option value="0">Other</option>
-						</select>
-					</div>
-
-					<div className="form-group">
-						<label>Identification Number</label>
-						<input type="text" className="form-control" onChange={this.handleChange.bind(this, 'id_number')} value={this.state.id_number} placeholder="Passport / Driving Licience or NIC Number" />
-					</div>
-
-				</div>
-
-				<div className="col-md-10">
-					<h4>Contact Information</h4>
-				</div>
-
-
-				<div className="col-md-5">
-
-					<div className="form-group">
-						<label>Address</label>
-						<input type="text" className="form-control" onChange={this.handleChange.bind(this, 'address')} value={this.state.address} placeholder="Patient Address" />
-					</div>
-
-					<div className="form-group">
-						<label>District</label>
-						<select value="1" onChange={this.handleChange.bind(this, 'district')} className="form-control">
-						  <option value="1">Ampara</option>
-						  <option value="2">Anuradhapura</option>
-						  <option value="3">Badulla</option>
-						  <option value="4">Batticaloa</option>
-						  <option value="5">Colombo</option>
-						  <option value="6">Galle</option>
-						  <option value="7">Gampaha</option>
-						  <option value="8">H'thota</option>
-						  <option value="9">Jaffna</option>
-						  <option value="10">Kaluthara</option>
-						  <option value="11">Kandy</option>
-						  <option value="12">Kegalle</option>
-						  <option value="13">Kilinochchi</option>
-						  <option value="14">Kurunegala</option>
-						  <option value="15">Mannar</option>
-						  <option value="16">Matale</option>
-						  <option value="17">Mathara</option>
-						  <option value="18">Monaragala</option>
-						  <option value="19">Mullaitivu</option>
-						  <option value="20">Nuwara Eliya</option>
-						  <option value="21">Polonnaruwa</option>
-						  <option value="22">Puttalam</option>
-						  <option value="23">Ratnapura</option>
-						  <option value="24">Trincomalee</option>
-						  <option value="25">Vavuniya</option>
-						</select>
-					</div>
-
-				</div>
-
-				<div className="col-md-5">
-					<div className="form-group">
-						<label>Province</label>
-						<select value="1" onChange={this.handleChange.bind(this, 'province')} className="form-control">
-						  <option value="1">Western</option>
-						  <option value="2">North Western</option>
-						  <option value="3">Central</option>
-						  <option value="4">Southern</option>
-						  <option value="5">Sabaragmuwa</option>
-						  <option value="6">Uwa</option>
-						  <option value="7">Nothern</option>
-						  <option value="8">Eastern</option>
-						  <option value="9">North Central</option>
-						</select>
-					</div>	
-				</div>
-
-				<div className="col-md-10">
-					<h4>Gurdian Information</h4>
-				</div>
-
-				<div className="col-md-5">
-					<div className="form-group">
-						<label>Gurdian Name</label>
-						<input onChange={this.handleChange.bind(this, 'gname')} value={this.state.gname} type="text" className="form-control" placeholder="Patient Gurdian Name" />
-					</div>
-
-				</div>
-				<div className="col-md-5">
-					<div className="form-group">
-						<label>Gurdian Contact Number</label>
-						<input onChange={this.handleChange.bind(this, 'gcontact')} value={this.state.gcontact} type="text" className="form-control" placeholder="Patient Gurdian Contact Number" />
-					</div>
-
-				</div>
-
-				<div className="col-md-5">
-					<button type="submit" className="btn btn-info">Add Patient Record</button>
-				</div>
-			</form>
-		</div>
+	      	</form>
+      	</div>
       </div>
     );
   }
 }
+
+$('.dropdown')
+    .dropdown()
+;
 
 NewpatientComponent.displayName = 'NewpatientComponent';
 

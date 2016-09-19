@@ -5,12 +5,13 @@ import React from 'react';
 
 
 import NewPatient from './NewpatientComponent'
+import NewMedicalInfo from './NewMedicalInfomationComponent'
 
 class AppComponent extends React.Component {
   render() {
     return (
       <div className="index">
-		<NewPatient />       	
+		<NewMedicalInfo />       	
       </div>
     );
   }

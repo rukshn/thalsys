@@ -23,7 +23,11 @@ let init_state = {
 		district: 1,
 		province: 1,
 		gname: '',
-		gcontact: ''
+		gcontact: '',
+		xdob: moment([], 'X'),
+		xdor: moment([], 'X'),
+		email: '',
+		mobile: ''
 	}
 
 class NewpatientComponent extends React.Component {
@@ -35,13 +39,15 @@ class NewpatientComponent extends React.Component {
 
   dobChange(date){
   	this.setState({
-  		dob: date
+  		dob: date,
+  		xdob: date.unix()
   	})
   }
 
   dorChange(date){
   	this.setState({
-  		dor: date
+  		dor: date,
+  		xdor: date.unix()
   	})
   }
 
@@ -63,11 +69,13 @@ class NewpatientComponent extends React.Component {
   	var patient_details = {}
 
   	patient_details['clinic_number'] = this.state.clinic_number
-  	patient_details['fname'] = this.state.first_name
+  	patient_details['first_name'] = this.state.first_name
   	patient_details['last_name'] = this.state.last_name
   	patient_details['occupation'] = this.state.occupation
   	patient_details['dor'] = this.state.dor
+  	patient_details['xdor'] = this.state.xdor
   	patient_details['dob'] = this.state.dob
+  	patient_details['xdob'] = this.state.xdob
   	patient_details['gender'] = this.state.gender
   	patient_details['civil_status'] = this.state.civil_status
   	patient_details['religion'] = this.state.religion
@@ -75,10 +83,25 @@ class NewpatientComponent extends React.Component {
   	patient_details['address'] = this.state.address
   	patient_details['district'] = this.state.district
   	patient_details['province'] = this.state.province
-  	patient_details['gname'] = this.state.gname
-  	patient_details['gcontact'] = this.state.gcontact
+  	patient_details['g_name'] = this.state.gname
+  	patient_details['g_contact'] = this.state.gcontact
+  	patient_details['telephone'] = this.state.mobile
+  	patient_details['email'] = this.state.email
 
-  	console.log(patient_details)
+
+  	var post_request = new Request('http://127.0.0.1:5000/add_new_patient', {
+  		method: 'post',
+  		headers: new Headers({
+      		"Content-type": "application/json; charset=UTF-8"
+      	}),
+  		body: JSON.stringify(patient_details)
+  	})
+
+  	fetch(post_request).then(function(response){
+  		return response.json()
+  	}).then(function(response){
+			console.log(response.user);
+		})
 
   }
 
@@ -171,10 +194,25 @@ class NewpatientComponent extends React.Component {
 					</div>
 
 					<div className="field">
+						<label>Contact and working details</label>
+						<div className="three fields">
+							<div className="field">
+								<input type="text" placeholder="Patient contact #" onChange={this.handleChange.bind(this, 'mobile')} />
+							</div>
+							<div className="field">
+								<input type="text" placeholder="Patient email address" onChange={this.handleChange.bind(this, 'email')} />
+							</div>
+							<div className="field">
+								<input type="text" placeholder="Patient occupation" onChange={this.handleChange.bind(this, 'occupation')} />
+							</div>
+						</div>
+					</div>
+
+					<div className="field">
 						<div className="three fields">
 							<div className="field">
 								<label>Address</label>
-								<input required placeholder="Address without district" type="text" />
+								<input required placeholder="Address without district" type="text" onChange={this.handleChange.bind(this, 'address')} />
 							</div>
 							<div className="field">
 								<label>District</label>
@@ -240,7 +278,7 @@ class NewpatientComponent extends React.Component {
 
 							<div className="field">
 								<label>Civil Status</label>
-								<select value="1" onChange={this.handleChange.bind(this, 'civil_status')} className="form-control">
+								<select value="1" onChange={this.handleChange.bind(this, 'civil_status')} className="ui dropdown">
 								  <option value="1">Single</option>
 								  <option value="2">Married</option>
 								  <option value="0">Other</option>
@@ -253,14 +291,14 @@ class NewpatientComponent extends React.Component {
 							</div>
 						</div>
 					</div>
-					
+
 					<div className="field">
 						<label>Guardian details</label>
 						<div className="fields">
 							<div className="twelve wide field">
 							<input placeholder="Guardian name" type="text" onChange={this.handleChange.bind(this, 'gname')} />
 							</div>
-							
+
 							<div className="six wide field">
 								<input placeholder="Guardian contact #" type="text" onChange={this.handleChange.bind(this, 'gcontact')} />
 							</div>
@@ -279,9 +317,8 @@ class NewpatientComponent extends React.Component {
   }
 }
 
-$('.dropdown')
-    .dropdown()
-;
+$('.dropdown').dropdown()
+$('select.dropdown').dropdown();
 
 NewpatientComponent.displayName = 'NewpatientComponent';
 

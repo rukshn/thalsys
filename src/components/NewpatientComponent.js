@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import { Route, browserHistroy, routerMiddleware} from 'react-router'
 
 require('styles//Newpatient.scss');
 var DatePicker = require('react-datepicker');
@@ -24,16 +25,16 @@ let init_state = {
 		province: 1,
 		gname: '',
 		gcontact: '',
-		xdob: moment([], 'X'),
-		xdor: moment([], 'X'),
+		xdob: moment().unix(),
+		xdor: moment().unix(),
 		email: '',
 		mobile: ''
 	}
 
 class NewpatientComponent extends React.Component {
 
-  constructor(){
-  	super()
+  constructor(context, props){
+  	super(context, props)
   	this.state = init_state
   }
 
@@ -61,7 +62,8 @@ class NewpatientComponent extends React.Component {
   }
 
   reset_form(){
-  	this.setState(init_state)
+  	this.context.router.push('/medical/123')
+  	// this.setState(init_state)
   }
 
   add_new_patient(e){
@@ -92,16 +94,18 @@ class NewpatientComponent extends React.Component {
   	var post_request = new Request('http://127.0.0.1:5000/add_new_patient', {
   		method: 'post',
   		headers: new Headers({
-      		"Content-type": "application/json; charset=UTF-8"
+      		'Content-type': 'application/json; charset=UTF-8'
       	}),
   		body: JSON.stringify(patient_details)
   	})
 
+	var state = this
   	fetch(post_request).then(function(response){
   		return response.json()
   	}).then(function(response){
-			console.log(response.user);
-		})
+		var url = '/new/medical/' + response.user
+  		state.context.router.push('/new/medical/' + response.user)
+	})
 
   }
 
@@ -179,7 +183,7 @@ class NewpatientComponent extends React.Component {
 						<div className="two fields">
 							<div className="field">
 								<label>Gender</label>
-								 <select className="ui dropdown" onChange={this.handleChange.bind(this, 'gender')}>
+								 <select value={this.state.gender} className="ui dropdown" onChange={this.handleChange.bind(this, 'gender')}>
 								 	<option value="1">Male</option>
 								 	<option value="2">Female</option>
 								 	<option value="0">Other</option>
@@ -197,10 +201,10 @@ class NewpatientComponent extends React.Component {
 						<label>Contact and working details</label>
 						<div className="three fields">
 							<div className="field">
-								<input type="text" placeholder="Patient contact #" onChange={this.handleChange.bind(this, 'mobile')} />
+								<input type="text" min="10" placeholder="Patient contact #" onChange={this.handleChange.bind(this, 'mobile')} />
 							</div>
 							<div className="field">
-								<input type="text" placeholder="Patient email address" onChange={this.handleChange.bind(this, 'email')} />
+								<input type="email" placeholder="Patient email address" onChange={this.handleChange.bind(this, 'email')} />
 							</div>
 							<div className="field">
 								<input type="text" placeholder="Patient occupation" onChange={this.handleChange.bind(this, 'occupation')} />
@@ -216,7 +220,7 @@ class NewpatientComponent extends React.Component {
 							</div>
 							<div className="field">
 								<label>District</label>
-								<select value="1" onChange={this.handleChange.bind(this, 'district')} className="ui dropdown">
+								<select value={this.state.district} onChange={this.handleChange.bind(this, 'district')} className="ui dropdown">
 								  <option value="1">Ampara</option>
 								  <option value="2">Anuradhapura</option>
 								  <option value="3">Badulla</option>
@@ -247,7 +251,7 @@ class NewpatientComponent extends React.Component {
 
 							<div className="field">
 								<label>Province</label>
-								<select value="1" onChange={this.handleChange.bind(this, 'province')} className="ui dropdown">
+								<select value={this.state.province} onChange={this.handleChange.bind(this, 'province')} className="ui dropdown">
 								  <option value="1">Western</option>
 								  <option value="2">North Western</option>
 								  <option value="3">Central</option>
@@ -267,7 +271,7 @@ class NewpatientComponent extends React.Component {
 
 							<div className="field">
 								<label>Religion</label>
-								<select value="1" onChange={this.handleChange.bind(this, 'religion')} className="ui dropdown">
+								<select value={this.state.religion} onChange={this.handleChange.bind(this, 'religion')} className="ui dropdown">
 								  <option value="1">Bhuddist</option>
 								  <option value="2">Cathoic</option>
 								  <option value="3">Hindu</option>
@@ -278,7 +282,7 @@ class NewpatientComponent extends React.Component {
 
 							<div className="field">
 								<label>Civil Status</label>
-								<select value="1" onChange={this.handleChange.bind(this, 'civil_status')} className="ui dropdown">
+								<select value={this.state.civil_status} onChange={this.handleChange.bind(this, 'civil_status')} className="ui dropdown">
 								  <option value="1">Single</option>
 								  <option value="2">Married</option>
 								  <option value="0">Other</option>
@@ -308,7 +312,7 @@ class NewpatientComponent extends React.Component {
 	      		</div>
 
 	      		<button type="submit" className="ui teal button">Submit</button>
-	      		<button onClick={this.reset_form.bind(this)} className="ui button">Reset</button>
+	      		<button type="button" onClick={this.reset_form.bind(this)} className="ui button">Reset</button>
 
 	      	</form>
       	</div>
@@ -325,5 +329,9 @@ NewpatientComponent.displayName = 'NewpatientComponent';
 // Uncomment properties you need
 // NewpatientComponent.propTypes = {};
 // NewpatientComponent.defaultProps = {};
+
+NewpatientComponent.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 
 export default NewpatientComponent;

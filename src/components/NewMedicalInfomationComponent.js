@@ -14,21 +14,21 @@ class NewMedicalInfomationComponent extends React.Component {
   	super()
   	this.state = {
   		ddiabetes: moment(),
-      xddiabetes: '',
+      xddiabetes: moment().unix(),
       pid: props.params.pid,
   		pmh : [],
   		pmh_con: '',
   		pmh_date: moment(),
-      xpmh_date: '',
+      xpmh_date: moment().unix(),
   		pmh_mng: '',
       pthdate: moment(),
-      xpthdate: '',
+      xpthdate: moment().unix(),
       tshdate: moment(),
-      xtshdate: '',
+      xtshdate: moment().unix(),
       liverdate: moment(),
-      xliverdate: '',
+      xliverdate: moment().unix(),
       pubertydate: moment(),
-      xpubertydate: '',
+      xpubertydate: moment().unix(),
       notes: '',
       diagnosis: '',
       diagnosis_mode: '',
@@ -38,14 +38,21 @@ class NewMedicalInfomationComponent extends React.Component {
       livermng: '',
       pthmng: '',
       tshmng: '',
-      pubmng: ''
+      pubmng: '',
+      diabetes: false,
+      puberty: false,
+      altered_liver: false,
+      hypothyroid: false,
+      hypoparathyroid: false
   	}
+
+		console.log(this.state.pid)
   }
 
   diabetesdateChange(date){
-    thi.setState({
+    this.setState({
       ddiabetes: date,
-      xdiabetes: date.unix()
+      xddiabetes: date.unix()
     })
   }
 
@@ -83,14 +90,31 @@ class NewMedicalInfomationComponent extends React.Component {
     medical_details['tshmng'] = this.state.tshmng
     medical_details['pthmng'] = this.state.pthmng
     medical_details['pubmng'] = this.state.pubmng
+    medical_details['diabetes'] = this.state.diabetes
+    medical_details['puberty'] = this.state.puberty
+    medical_details['altered_liver'] = this.state.altered_liver
+    medical_details['hypothyroid'] = this.state.hypothyroid
+    medical_details['hypoparathyroid'] = this.state.hypoparathyroid
+    medical_details['diagnosis'] = this.state.diagnosis
+    medical_details['diagnosis_mode'] = this.state.diagnosis_mode
+    medical_details['diagnosis_age'] = this.state.diagnosis_age
+    medical_details['hb_diagnosis'] = this.state.hb_diagnosis
+
 
     var post_request = new Request('http://127.0.0.1:5000/new_medical_details', {
       method: 'post',
       headers: new Headers({
         "Content-type" : "application/json; charset=UTF-8"
       }),
-      body: json.stringify(medical_details)
+      body: JSON.stringify(medical_details)
     })
+
+    console.log(JSON.stringify(medical_details));
+    // fetch(post_request).then(function(response){
+    //   return response.json()
+    // }).then(function(response){
+    //   console.log(response);
+    // })
   }
 
   add_med_condition(){
@@ -105,7 +129,11 @@ class NewMedicalInfomationComponent extends React.Component {
 
 
     this.setState({
-      pmh: new_pmh
+      pmh: new_pmh,
+      pmh_date: moment(),
+      pmh_con: '',
+      pmh_mng: '',
+      xpmh_date: moment().unix()
     })
   }
 
@@ -142,6 +170,13 @@ class NewMedicalInfomationComponent extends React.Component {
     change[dvar] = e.target.value
     this.setState(change)
   }
+
+  handleTick(dvar,e){
+    var change = {}
+    change[dvar] = e.target.checked
+    this.setState(change)
+  }
+
 
   render() {
     return (
@@ -186,26 +221,26 @@ class NewMedicalInfomationComponent extends React.Component {
 							<div className="field">
 								<select onChange={this.handleChange.bind(this, 'diagnosis')} className="ui dropdown">
 									<option value="">Diagnosis</option>
-									<option>Thalassemia Major</option>
-									<option>Thalassemia Intermedia</option>
-									<option>Sickle Cell Disease</option>
+									<option value="1">Thalassemia Major</option>
+									<option value="2">Thalassemia Intermedia</option>
+									<option value="3">Sickle Cell Disease</option>
 								</select>
 							</div>
 
 							<div className="field">
-								<input onChange={this.handleChange.bind(this, 'diagnosis_age')} type="number" required placeholder="Age at diagnosis" />
+								<input onChange={this.handleChange.bind(this, 'diagnosis_age')} min="0" max="120" type="number" required placeholder="Age at diagnosis" />
 							</div>
 
 							<div className="field">
-								<input onChange={this.handleChange.bind(this, 'hb_diagnosis')} type="number" required placeholder="HB level at diagnosis" />
+								<input onChange={this.handleChange.bind(this, 'hb_diagnosis')} min="0" type="number" required placeholder="HB level at diagnosis" />
 							</div>
 
 							<div className="field">
 								<select onChange={this.handleChange.bind(this, 'diagnosis_mode')} className="ui dropdown">
 									<option value="">Mode of diagnosis</option>
-									<option>Blood picture</option>
-									<option>HPLC</option>
-									<option>Genetics</option>
+									<option value="1">Blood picture</option>
+									<option value="2">HPLC</option>
+									<option value="3">Genetics</option>
 								</select>
 							</div>
 						</div>
@@ -217,7 +252,7 @@ class NewMedicalInfomationComponent extends React.Component {
 								<div className="field">
 									<label>Complication</label>
 								    <div className="ui toggle checkbox">
-								      <input type="checkbox" />
+								      <input onChange={this.handleTick.bind(this, 'diabetes')} type="checkbox" />
 								      <label>Diabetes</label>
 								    </div>
 								</div>
@@ -234,7 +269,7 @@ class NewMedicalInfomationComponent extends React.Component {
 							<div className="three fields">
 								<div className="field">
 									<div className="ui toggle checkbox">
-								      <input type="checkbox" />
+								      <input onChange={this.handleTick.bind(this, 'hypothyroid')} value={this.state.hypothyroid} type="checkbox" />
 								      <label>Hypothyroidism</label>
 								    </div>
 								</div>
@@ -251,7 +286,7 @@ class NewMedicalInfomationComponent extends React.Component {
 							<div className="three fields">
 								<div className="field">
 									<div className="ui toggle checkbox">
-								      <input type="checkbox" />
+								      <input onChange={this.handleTick.bind(this, 'hypoparathyroid')} type="checkbox" />
 								      <label>Hypoparathyroidism</label>
 								    </div>
 								</div>
@@ -269,7 +304,7 @@ class NewMedicalInfomationComponent extends React.Component {
 							<div className="three fields">
 								<div className="field">
 									<div className="ui toggle checkbox">
-								      <input type="checkbox" />
+								      <input onChange={this.handleTick.bind(this, 'altered_liver')} type="checkbox" />
 								      <label>Altered liver functions</label>
 								    </div>
 								</div>
@@ -286,7 +321,7 @@ class NewMedicalInfomationComponent extends React.Component {
 							<div className="three fields">
 								<div className="field">
 									<div className="ui toggle checkbox">
-								      <input type="checkbox" />
+								      <input onChange={this.handleTick.bind(this, 'puberty')} type="checkbox" />
 								      <label>Delayed puberty</label>
 								    </div>
 								</div>
@@ -335,7 +370,7 @@ class NewMedicalInfomationComponent extends React.Component {
 								</div>
 							</div>
 
-							<button className="ui basic button" onClick={this.add_med_condition.bind(this)}>
+							<button type="button" className="ui basic button" onClick={this.add_med_condition.bind(this)}>
 							  <i className="icon plus"></i>
 							  Add medical condition
 							</button>

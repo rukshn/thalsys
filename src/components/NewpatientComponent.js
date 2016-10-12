@@ -62,8 +62,7 @@ class NewpatientComponent extends React.Component {
   }
 
   reset_form(){
-  	this.context.router.push('/medical/123')
-  	// this.setState(init_state)
+  	this.setState(init_state)
   }
 
   add_new_patient(e){
@@ -103,7 +102,6 @@ class NewpatientComponent extends React.Component {
   	fetch(post_request).then(function(response){
   		return response.json()
   	}).then(function(response){
-		var url = '/new/medical/' + response.user
   		state.context.router.push('/new/medical/' + response.user)
 	})
 

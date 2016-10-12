@@ -10,8 +10,8 @@ require('react-datepicker/dist/react-datepicker.css');
 
 class NewMedicalInfomationComponent extends React.Component {
 
-  constructor(props){
-  	super()
+  constructor(props,context){
+  	super(props,context)
   	this.state = {
   		ddiabetes: moment(),
       xddiabetes: moment().unix(),
@@ -68,37 +68,50 @@ class NewMedicalInfomationComponent extends React.Component {
 
     var medical_details = {}
 
+		// patient id
     medical_details['pid'] = this.state.pid
+
+		// diabetes
+    medical_details['diabetes'] = this.state.diabetes		
     medical_details['ddiabetes'] = this.state.ddiabetes
     medical_details['xddiabetes'] = this.state.xddiabetes
-    medical_details['pmh'] = this.state.pmh
+    medical_details['dmmng'] = this.state.dmmng
+		
+		// thyroid
+    medical_details['hypothyroid'] = this.state.hypothyroid		
+		medical_details['tshdate'] = this.state.tshdate
+    medical_details['xtshdate'] = this.state.xtshdate
+    medical_details['tshmng'] = this.state.tshmng
+
+		// parathyroid
+    medical_details['hypoparathyroid'] = this.state.hypoparathyroid
     medical_details['pthdate'] = this.state.pthdate
     medical_details['xpthdate'] = this.state.xpthdate
-    medical_details['tshdate'] = this.state.tshdate
-    medical_details['xtshdate'] = this.state.xtshdate
-    medical_details['liverdate'] = this.state.liverdate
+    medical_details['pthmng'] = this.state.pthmng
+		  
+		// liver
+    medical_details['altered_liver'] = this.state.altered_liver		
+		medical_details['liverdate'] = this.state.liverdate
     medical_details['xliverdate'] = this.state.xliverdate
+    medical_details['livermng'] = this.state.livermng
+		
+		// puberty
+    medical_details['puberty'] = this.state.puberty
     medical_details['pubertydate'] = this.state.pubertydate
     medical_details['xpubertydate'] = this.state.xpubertydate
-    medical_details['notes'] = this.state.notes
-    medical_details['disgnosis'] = this.state.disgnosis
-    medical_details['disgnosis_mode'] = this.state.disgnosis_mode
-    medical_details['disgnosis_age'] = this.state.disgnosis_age
-    medical_details['hb_disgnosis'] = this.state.hb_disgnosis
-    medical_details['dmmng'] = this.state.dmmng
-    medical_details['livermng'] = this.state.livermng
-    medical_details['tshmng'] = this.state.tshmng
-    medical_details['pthmng'] = this.state.pthmng
     medical_details['pubmng'] = this.state.pubmng
-    medical_details['diabetes'] = this.state.diabetes
-    medical_details['puberty'] = this.state.puberty
-    medical_details['altered_liver'] = this.state.altered_liver
-    medical_details['hypothyroid'] = this.state.hypothyroid
-    medical_details['hypoparathyroid'] = this.state.hypoparathyroid
-    medical_details['diagnosis'] = this.state.diagnosis
+
+		// past medical history
+		medical_details['pmh'] = this.state.pmh
+
+		// diagnosis details
+		medical_details['diagnosis'] = this.state.diagnosis
     medical_details['diagnosis_mode'] = this.state.diagnosis_mode
     medical_details['diagnosis_age'] = this.state.diagnosis_age
     medical_details['hb_diagnosis'] = this.state.hb_diagnosis
+
+		// notes
+    medical_details['notes'] = this.state.notes
 
 
     var post_request = new Request('http://127.0.0.1:5000/new_medical_details', {
@@ -109,32 +122,37 @@ class NewMedicalInfomationComponent extends React.Component {
       body: JSON.stringify(medical_details)
     })
 
-    console.log(JSON.stringify(medical_details));
-    // fetch(post_request).then(function(response){
-    //   return response.json()
-    // }).then(function(response){
-    //   console.log(response);
-    // })
+		var state = this
+
+    fetch(post_request).then(function(response){
+      return response.json()
+    }).then(function(response){
+			state.context.router.push('/new/surgical/' + response.user)
+    })
   }
 
   add_med_condition(){
     var new_condition = {}
-    new_condition['condate'] = this.state.pmh_date
-    new_condition['condition'] = this.state.pmh_con
-    new_condition['management'] = this.state.pmh_mng
-    new_condition['xcondate'] = this.state.xpmh_date
 
-    var new_pmh = this.state.pmh
-    new_pmh.push(new_condition)
+		if(this.state.pmh_con.length > 0){
+			new_condition['condate'] = this.state.pmh_date
+			new_condition['condition'] = this.state.pmh_con
+			new_condition['management'] = this.state.pmh_mng
+			new_condition['xcondate'] = this.state.xpmh_date
+
+			var new_pmh = this.state.pmh
+			new_pmh.push(new_condition)
 
 
-    this.setState({
-      pmh: new_pmh,
-      pmh_date: moment(),
-      pmh_con: '',
-      pmh_mng: '',
-      xpmh_date: moment().unix()
-    })
+			this.setState({
+				pmh: new_pmh,
+				pmh_date: moment(),
+				pmh_con: '',
+				pmh_mng: '',
+				xpmh_date: moment().unix()
+			})
+		}
+
   }
 
   tshdatechange(date){
@@ -401,5 +419,9 @@ NewMedicalInfomationComponent.displayName = 'NewMedicalInfomationComponent';
 // Uncomment properties you need
 // NewMedicalInfomationComponent.propTypes = {};
 // NewMedicalInfomationComponent.defaultProps = {};
+
+NewMedicalInfomationComponent.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 
 export default NewMedicalInfomationComponent;

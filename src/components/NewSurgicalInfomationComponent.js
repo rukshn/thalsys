@@ -8,25 +8,81 @@ var DatePicker = require('react-datepicker');
 var moment = require('moment');
 require('react-datepicker/dist/react-datepicker.css');
 
+
+var init_state = {
+			splenectomy: '',
+			splenectomy_date : moment(),
+			splenectomy_xdate: moment().unix(),
+			pid: '',
+			cholecystectomy: '',
+			cholecystectomy_date: moment(),
+			cholecystectomy_xdate: moment().unix(),
+			legulcer: 0,
+			other_notes : ''
+		}
+
 class NewSurgicalInfomationComponent extends React.Component {
 
-	constructor(props){
-		super()
+	constructor(props,context){
+		super(props,context)
 		this.state = {
 			splenectomy: '',
 			splenectomy_date : moment(),
-			splenectomy_xdate: moment([],'X'),
+			splenectomy_xdate: moment().unix(),
 			pid: props.params.pid,
 			cholecystectomy: '',
 			cholecystectomy_date: moment(),
-			cholecystectomy_xdate: moment([], 'X'),
+			cholecystectomy_xdate: moment().unix(),
 			legulcer: 0,
 			other_notes : ''
 		}
 	}
 
+	reset(){
+		this.setState(init_state)
+		this.setState({
+			pid : props.params.pid
+		})
+	}
 
-	add_surgical_info(e){
+	add_surgical_details(e){
+  	e.preventDefault()
+
+		var surgical_details = {}
+		
+		// splenectomy
+		surgical_details['splenectomy'] = this.state.splenectomy
+		surgical_details['splenectomy_date'] = this.state.splenectomy_date
+		surgical_details['splenectomy_xdate'] = this.state.splenectomy_xdate
+
+		// cholecystectomy
+		surgical_details['cholecystectomy'] = this.state.cholecystectomy
+		surgical_details['cholecystectomy_date'] = this.state.cholecystectomy_date
+		surgical_details['cholecystectomy_xdate'] = this.state.cholecystectomy_xdate
+
+		// leg ulcers
+		surgical_details['legulcer'] = this.state.legulcer
+
+		// other notes
+		surgical_details['notes'] = this.state.other_notes
+
+		surgical_details['pid'] = this.state.pid
+
+		var post_request = new Request('http://127.0.0.1:5000/new_surgical_details', {
+      method: 'post',
+      headers: new Headers({
+        "Content-type" : "application/json; charset=UTF-8"
+      }),
+      body: JSON.stringify(surgical_details)
+    })
+
+		var state = this
+
+    fetch(post_request).then(function(response){
+      return response.json()
+    }).then(function(response){
+			console.log(response)
+    })
 
 	}
 
@@ -85,7 +141,7 @@ class NewSurgicalInfomationComponent extends React.Component {
 				<p>This is the final step, in this step you must enter patient's surgical history and complete the setup</p>
 			</div>
 
-			<form className="ui form">
+			<form onSubmit={this.add_surgical_details.bind(this)} className="ui form">
 			  	<div className="field">
 					<label>Surgeries</label>
 					<div className="three fields">
@@ -110,7 +166,7 @@ class NewSurgicalInfomationComponent extends React.Component {
 							</div>
 						</div>
 						<div className="field" id="dpicker">
-							<DatePicker className="ui input fluid" selected={this.state.splenectomy_date} onChange={this.cholecystectomy_date.bind(this)} />
+							<DatePicker className="ui input fluid" selected={this.state.cholecystectomy_date} onChange={this.cholecystectomy_date.bind(this)} />
 						</div>
 					</div>
 
@@ -129,6 +185,7 @@ class NewSurgicalInfomationComponent extends React.Component {
 					</div>
 			 	</div>
 				<button className="ui teal button" type="submit">Add surgical records</button>
+				<button className="ui button" type="button" onClick={this.reset.bind(this)}>Reset</button>
 			</form>
 		</div>
 	  </div>
@@ -146,5 +203,10 @@ NewSurgicalInfomationComponent.displayName = 'NewSurgicalInfomationComponent';
 // Uncomment properties you need
 // NewSurgicalInfomationComponent.propTypes = {};
 // NewSurgicalInfomationComponent.defaultProps = {};
+
+
+NewSurgicalInfomationComponent.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 
 export default NewSurgicalInfomationComponent;

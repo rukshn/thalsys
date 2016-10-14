@@ -141,8 +141,8 @@ class NewpatientComponent extends React.Component {
 			</div>
 
 
-      		<div className="ui tertiary inverted teal segment">
-		  		<p>This is the first step, you must enter patient's personal details and proceed to next step. Use TAB key for quick navigation</p>
+      <div className="ui tertiary inverted teal segment">
+		  	<p>This is the first step, you must enter patient's personal details and proceed to next step. Use TAB key for quick navigation</p>
 			</div>
 
 			<form onSubmit={this.add_new_patient.bind(this)}>
@@ -307,10 +307,10 @@ class NewpatientComponent extends React.Component {
 						</div>
 					</div>
 
-	      		</div>
+	      	</div>
 
-	      		<button type="submit" className="ui teal button">Submit</button>
-	      		<button type="button" onClick={this.reset_form.bind(this)} className="ui button">Reset</button>
+	      	<button type="submit" className="ui teal button">Submit</button>
+	      	<button type="button" onClick={this.reset_form.bind(this)} className="ui button">Reset</button>
 
 	      	</form>
       	</div>

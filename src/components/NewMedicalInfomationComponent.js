@@ -43,11 +43,22 @@ class NewMedicalInfomationComponent extends React.Component {
       puberty: false,
       altered_liver: false,
       hypothyroid: false,
-      hypoparathyroid: false
+      hypoparathyroid: false,
+			on_tx: '',
+			date_first_tx: moment(),
+			date_first_tx_x : moment.unix(),
+			age_first_tx: '',
+			hb_first_tx: '',
+			curr_fq_tx: ''
   	}
-
-		console.log(this.state.pid)
   }
+
+	date_first_tx_change(date){
+		this.setState({
+			date_first_tx: date,
+			date_first_tx_x: date.unix()
+		})
+	}
 
   diabetesdateChange(date){
     this.setState({
@@ -72,13 +83,13 @@ class NewMedicalInfomationComponent extends React.Component {
     medical_details['pid'] = this.state.pid
 
 		// diabetes
-    medical_details['diabetes'] = this.state.diabetes		
+    medical_details['diabetes'] = this.state.diabetes
     medical_details['ddiabetes'] = this.state.ddiabetes
     medical_details['xddiabetes'] = this.state.xddiabetes
     medical_details['dmmng'] = this.state.dmmng
 		
 		// thyroid
-    medical_details['hypothyroid'] = this.state.hypothyroid		
+    medical_details['hypothyroid'] = this.state.hypothyroid
 		medical_details['tshdate'] = this.state.tshdate
     medical_details['xtshdate'] = this.state.xtshdate
     medical_details['tshmng'] = this.state.tshmng
@@ -90,7 +101,7 @@ class NewMedicalInfomationComponent extends React.Component {
     medical_details['pthmng'] = this.state.pthmng
 		  
 		// liver
-    medical_details['altered_liver'] = this.state.altered_liver		
+    medical_details['altered_liver'] = this.state.altered_liver
 		medical_details['liverdate'] = this.state.liverdate
     medical_details['xliverdate'] = this.state.xliverdate
     medical_details['livermng'] = this.state.livermng
@@ -113,6 +124,13 @@ class NewMedicalInfomationComponent extends React.Component {
 		// notes
     medical_details['notes'] = this.state.notes
 
+		// transfusion details
+		medical_details['on_tx'] = this.state.on_tx
+		medical_details['date_first_tx'] = this.state.date_first_tx
+		medical_details['date_first_tx_x'] = this.state.date_first_tx_x
+		medical_details['age_first_tx'] = this.state.age_first_tx
+		medical_details['hb_first_tx'] = this.state.hb_first_tx
+		medical_details['curr_fq_tx'] = this.state.curr_fq_tx
 
     var post_request = new Request('http://127.0.0.1:5000/new_medical_details', {
       method: 'post',
@@ -262,6 +280,29 @@ class NewMedicalInfomationComponent extends React.Component {
 								</select>
 							</div>
 						</div>
+
+						<div className="four fields">
+							<div className="field">
+								<label>Patient on transfusion</label>
+								<div className="ui toggle checkbox">
+										<input onChange={this.handleTick.bind(this, 'on_tx')} type="checkbox" />
+										<label>on transfusion</label>
+								</div>
+							</div>
+							<div className="field">
+								<label>Date of first transfusion</label>
+								<DatePicker className="ui input fluid" selected={this.state.date_first_tx} onChange={this.date_first_tx_change.bind(this)} />
+							</div>
+							<div className="field">
+								<label>Age at first transfusion</label>
+								<input type="number" value={this.state.age_first_tx} onChange={this.handleChange.bind(this, 'age_first_tx')} />
+							</div>
+							<div className="field">
+								<label>HB level at first transfusion</label>
+								<input type="number" value={this.state.hb_first_tx} onChange={this.handleChange.bind(this, 'hb_first_tx')} />
+							</div>
+						</div>
+
 					</div>
 
 					<div className="field">
@@ -341,7 +382,7 @@ class NewMedicalInfomationComponent extends React.Component {
 									<div className="ui toggle checkbox">
 								      <input onChange={this.handleTick.bind(this, 'puberty')} type="checkbox" />
 								      <label>Delayed puberty</label>
-								    </div>
+								  </div>
 								</div>
 
 								<div className="field" id="dpicker">
@@ -400,8 +441,9 @@ class NewMedicalInfomationComponent extends React.Component {
 						</div>
 					</div>
 					<button className="ui teal button" type="submit">Add medical records</button>
+					<button type="button" className="ui button">Reset Form</button>
 				</form>
-			</div>
+				</div>
         </div>
       </div>
     );

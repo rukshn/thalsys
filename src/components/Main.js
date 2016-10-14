@@ -7,6 +7,9 @@ import NewPatient from './NewpatientComponent'
 import NewMedicalInfo from './NewMedicalInfomationComponent'
 import NewSurgicalInfo from './NewSurgicalInfomationComponent'
 import Home from './HomeComponent'
+import NewFbc from './blood/FbcInvesComponent'
+import NewTransfusion from './blood/TransfusionComponent'
+import NewLft from './investigations/LftInvesComponent.js'
 
 class AppComponent extends React.Component {
   render() {
@@ -16,6 +19,9 @@ class AppComponent extends React.Component {
           <Route path="/new/info/" component={NewPatient}></Route>
           <Route path="/new/medical/:pid" component={NewMedicalInfo}></Route>
           <Route path="/new/surgical/:pid" component={NewSurgicalInfo}></Route>
+          <Route path="/new/investigation/fbc/:pid" component={NewFbc}></Route>
+          <Route path="/new/transfusion/:pid" component={NewTransfusion}></Route>
+          <Route path="/new/investigation/liver/:pid" component={NewLft}></Route>
         </Route>
       </Router>
     );

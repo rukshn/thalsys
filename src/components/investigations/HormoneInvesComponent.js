@@ -8,7 +8,9 @@ class HormoneInvesComponent extends React.Component {
   render() {
     return (
       <div className="hormoneinves-component">
-        .ui.container>.ui.form>.inline.field*5
+        <div className="header is-divider">
+          
+        </div>
       </div>
     );
   }

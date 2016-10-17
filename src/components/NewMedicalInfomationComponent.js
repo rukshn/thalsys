@@ -272,7 +272,7 @@ class NewMedicalInfomationComponent extends React.Component {
 							</div>
 
 							<div className="field">
-								<select onChange={this.handleChange.bind(this, 'diagnosis_mode')} className="ui dropdown">
+								<select onChange={this.handleChange.bind(this, 'diagnosis_mode')} value={this.state.diagnosis_mode} className="ui dropdown">
 									<option value="">Mode of diagnosis</option>
 									<option value="1">Blood picture</option>
 									<option value="2">HPLC</option>

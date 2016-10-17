@@ -126,4 +126,7 @@ TshInvesComponent.displayName = 'TshInvesComponent';
 // TshInvesComponent.propTypes = {};
 // TshInvesComponent.defaultProps = {};
 
+TshInvesComponent.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 export default TshInvesComponent;

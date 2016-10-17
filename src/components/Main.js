@@ -9,7 +9,9 @@ import NewSurgicalInfo from './NewSurgicalInfomationComponent'
 import Home from './HomeComponent'
 import NewFbc from './blood/FbcInvesComponent'
 import NewTransfusion from './blood/TransfusionComponent'
-import NewLft from './investigations/LftInvesComponent.js'
+import NewLft from './investigations/LftInvesComponent'
+import TshInves from './investigations/TshInvesComponent'
+import HormoneInves from './investigations/HormoneInvesComponent'
 
 class AppComponent extends React.Component {
   render() {
@@ -22,6 +24,8 @@ class AppComponent extends React.Component {
           <Route path="/new/investigation/fbc/:pid" component={NewFbc}></Route>
           <Route path="/new/transfusion/:pid" component={NewTransfusion}></Route>
           <Route path="/new/investigation/liver/:pid" component={NewLft}></Route>
+          <Route path="/new/tsh/:pid" component={TshInves}></Route>
+          <Route path="/new/hormone/:pid" component={HormoneInves}></Route>
         </Route>
       </Router>
     );

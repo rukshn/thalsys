@@ -11,7 +11,7 @@ require('styles//TshInves.css');
 
 class TshInvesComponent extends React.Component {
 
-	constuctor(props, context){
+	constructor(){
 		super(props, context)
 		this.state = {
 			investigation_date : moment(),

@@ -81,7 +81,12 @@ class NewSurgicalInfomationComponent extends React.Component {
     fetch(post_request).then(function(response){
       return response.json()
     }).then(function(response){
-			console.log(response)
+			if (response.state == 200) {
+				
+			}
+			else{
+				return
+			}
     })
 
 	}

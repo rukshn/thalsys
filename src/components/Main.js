@@ -9,7 +9,7 @@ import NewSurgicalInfo from './NewSurgicalInfomationComponent'
 import Home from './HomeComponent'
 import NewFbc from './blood/FbcInvesComponent'
 import NewTransfusion from './blood/TransfusionComponent'
-import NewLft from './investigations/LftInvesComponent'
+import NewLft from './investigations/LftinvesComponent'
 import TshInves from './investigations/TshInvesComponent'
 import HormoneInves from './investigations/HormoneInvesComponent'
 import Chelation from './blood/ChelationComponent'
@@ -19,7 +19,7 @@ class AppComponent extends React.Component {
     return (
       <Router history={browserHistory}>
         <Route path="/" component={Home}>
-          <Route path="/new/info/" component={NewPatient}></Route>
+          <Route path="/new/infos" component={NewPatient}></Route>
           <Route path="/new/medical/:pid" component={NewMedicalInfo}></Route>
           <Route path="/new/surgical/:pid" component={NewSurgicalInfo}></Route>
           <Route path="/new/investigation/fbc/:pid" component={NewFbc}></Route>

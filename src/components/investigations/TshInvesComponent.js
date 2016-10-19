@@ -11,7 +11,7 @@ require('styles//TshInves.css');
 
 class TshInvesComponent extends React.Component {
 
-	constructor(){
+	constructor(context,props){
 		super(props, context)
 		this.state = {
 			investigation_date : moment(),
@@ -43,14 +43,15 @@ class TshInvesComponent extends React.Component {
 
 		var investigation_details = {}
 
-		investigation_details['patient_id'] = this.state.patient_id
+		investigation_details['pid'] = this.state.patient_id
 		investigation_details['investigation_date'] = this.state.investigation_date
-		investigation_details['investigation_date_x'] = this.state.investigation_date_x 
+		investigation_details['investigation_date_x'] = this.state.investigation_date_x
 		investigation_details['ft3'] = this.state.ft3
 		investigation_details['ft4'] = this.state.ft4
 		investigation_details['remarks'] = this.state.remarks
+		investigation_details['investigation_number'] = this.state.investigation_number
 
-    var post_request = new Request('http://127.0.0.1:5000/new_tsh', {
+    var post_request = new Request('http://127.0.0.1:5000/new_tsh_data', {
       method: 'post',
       headers: new Headers({
         'Content-type' : 'application/json; charset=UTF-8'

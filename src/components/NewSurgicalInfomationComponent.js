@@ -34,7 +34,8 @@ class NewSurgicalInfomationComponent extends React.Component {
 			cholecystectomy_date: moment(),
 			cholecystectomy_xdate: moment().unix(),
 			legulcer: 0,
-			other_notes : ''
+			other_notes : '',
+			pathological_fractures: ''
 		}
 	}
 
@@ -66,6 +67,9 @@ class NewSurgicalInfomationComponent extends React.Component {
 		// other notes
 		surgical_details['notes'] = this.state.other_notes
 
+		// pathological fractures
+		surgical_details['pathological_fracture'] = this.state.pathological_fractures
+		// patient id
 		surgical_details['pid'] = this.state.pid
 
 		var post_request = new Request('http://127.0.0.1:5000/new_surgical_details', {
@@ -175,12 +179,20 @@ class NewSurgicalInfomationComponent extends React.Component {
 						</div>
 					</div>
 
-					<div className="field">
-						<label>Leg ulcers</label>
-						<div className="ui toggle checkbox">
-							<input onChange={this.handleChange.bind(this, 'legulcer')} value={this.state.legulcer} type="checkbox"/>
+					<div className="three fields">
+						<div className="field">
 							<label>Leg ulcers</label>
-
+							<div className="ui toggle checkbox">
+								<input onChange={this.handleChange.bind(this, 'legulcer')} value={this.state.legulcer} type="checkbox"/>
+								<label>Leg ulcers</label>
+							</div>
+						</div>
+						<div className="field">
+							<label>Pathological fractures</label>
+							<div className="ui toggle checkbox">
+								<input onChange={this.handleChange.bind(this, 'pathological_fractures')} value={this.state.pathological_fractures} type="checkbox"/>
+								<label>Pathological fractures</label>
+							</div>
 						</div>
 					</div>
 

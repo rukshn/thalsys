@@ -3,6 +3,9 @@
 import React from 'react';
 
 require('styles//HormoneInves.css');
+var DatePicker = require('react-datepicker');
+var moment = require('moment');
+require('react-datepicker/dist/react-datepicker.css');
 
 class HormoneInvesComponent extends React.Component {
   constructor(props,context){
@@ -21,6 +24,13 @@ class HormoneInvesComponent extends React.Component {
       sip: '',
       invesgigation_number: ''
     }
+  }
+
+  investigation_date_change(date){
+    this.setState({
+      investigation_date: date,
+      investigation_date_x: date.unix()
+    })
   }
 
   add_investigation(e){
@@ -64,56 +74,59 @@ class HormoneInvesComponent extends React.Component {
   render() {
     return (
       <div className="hormoneinves-component">
-        <form onSubmit={this.add_investigation.bind(this)} className="ui form">
-          <h4 className="ui dividing header">Hormonal Studies</h4>
-          <div className="three fields">
-            <div className="field">
-              <label>Patient ID</label>
-              <input disabled="true" value={this.state.patient_id} />
+        <div className="container">
+          <form onSubmit={this.add_investigation.bind(this)} className="ui form">
+            <h4 className="ui dividing header">Hormonal Studies</h4>
+            <div className="three fields">
+              <div className="field">
+                <label>Patient ID</label>
+                <input disabled="true" value={this.state.patient_id} />
+              </div>
+              <div className="field">>
+                <label>Investigation ID</label>
+                <input value={this.state.investigation_id} onChange={this.handleChange.bind(this, 'investigation_id')} />
+              </div>
+              <div className="field">
+                <label>Investigation Date</label>
+                <DatePicker className="ui input fluid" selected={this.state.investigation_date} onChange={this.investigation_date_change.bind(this)} />
+              </div>
             </div>
-            <div className="field">>
-              <label>Investigation ID</label>
-              <input value={this.state.investigation_id} onChange={this.handleChange.bind(this, 'investigation_id')} />
-            </div>
-            <div className="field">
-              <label>Investigation Date</label>
-            </div>
-          </div>
 
-          <div className="four fields">
-            <div className="field">
-              <label>Follicle-Stimulating hormone</label>
-              <input placeholder="FSH level" value={this.state.fsh} onChange={this.handleChange.bind(this,'fsh')} />
+            <div className="four fields">
+              <div className="field">
+                <label>Follicle-Stimulating hormone</label>
+                <input placeholder="FSH level" value={this.state.fsh} onChange={this.handleChange.bind(this,'fsh')} />
+              </div>
+              <div className="field">
+                <label>Luteinizing hormone</label>
+                <input placeholder="LH level" value={this.state.lh} onChange={this.handleChange.bind(this, 'lh')} />
+              </div>
+              <div className="field">
+                <label>Testosterone</label>
+                <input placeholder="Testosterone level" value={this.state.testosterone} onChange={this.handleChange.bind(this, 'testosterone')} />
+              </div>
+              <div className="field">
+                <label>Oestrodiol</label>
+                <input placeholder="Oestrodiol level" value={this.state.oestrodiol} onChange={this.handleChange.bind(this, 'oestrodiol')} />
+              </div>
             </div>
-            <div className="field">
-              <label>Luteinizing hormone</label>
-              <input placeholder="LH level" value={this.state.lh} onChange={this.handleChange.bind(this, 'lh')} />
-            </div>
-            <div className="field">
-              <label>Testosterone</label>
-              <input placeholder="Testosterone level" value={this.state.testosterone} onChange={this.handleChange.bind(this, 'testosterone')} />
-            </div>
-            <div className="field">
-              <label>Oestrodiol</label>
-              <input placeholder="Oestrodiol level" value={this.state.oestrodiol} onChange={this.handleChange.bind(this, 'oestrodiol')} />
-            </div>
-          </div>
 
-          <h4 className="ui dividing header">Parathyroid Function</h4>
-          <div className="two fields">
-            <div className="field">
-              <label>Serum ionized calcium</label>
-              <input placeholder="Ionized calcium value" value={this.state.sic} onChange={this.handleChange.bind(this, 'sic')} />
+            <h4 className="ui dividing header">Parathyroid Function</h4>
+            <div className="two fields">
+              <div className="field">
+                <label>Serum ionized calcium</label>
+                <input placeholder="Ionized calcium value" value={this.state.sic} onChange={this.handleChange.bind(this, 'sic')} />
+              </div>
+              <div className="field">
+                <label>Serum ionized phosphorus</label>
+                <input placeholder="Ionized calcium value" value={this.state.sip} onChange={this.handleChange.bind(this, 'sip')} />
+              </div>
             </div>
-            <div className="field">
-              <label>Serum ionized phosphorus</label>
-              <input placeholder="Ionized calcium value" value={this.state.sip} onChange={this.handleChange.bind(this, 'sip')} />
-            </div>
-          </div>
 
-          <button className="ui teal button">Add Investigation</button>
-          <button className="ui button" type="button">Reset Form</button>
-        </form>
+            <button className="ui teal button">Add Investigation</button>
+            <button className="ui button" type="button">Reset Form</button>
+          </form>
+        </div>
       </div>
     );
   }
